@@ -64,6 +64,7 @@ const server = http.createServer((req, res) => {
         res.statusCode = 404;
         break;
     }
+    
  
                 ///----- this become to messy if the html file is large, sowe open an index.html file & link it up -----//////
             // res.write('<head><link rel="stylesheet" href="#"></head>');
