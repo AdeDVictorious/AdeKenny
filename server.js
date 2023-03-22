@@ -19,7 +19,6 @@
 
 
 
-
 //////////-----------fundamental background to NODE development------------/////////////
 /////------Another examples-----------//////////
 
@@ -63,9 +62,7 @@ const server = http.createServer((req, res) => {
         path += '404.html';
         res.statusCode = 404;
         break;
-    }
     
- 
                 ///----- this become to messy if the html file is large, sowe open an index.html file & link it up -----//////
             // res.write('<head><link rel="stylesheet" href="#"></head>');
             // res.write('<p>Hello Kenny</p>');
@@ -90,3 +87,7 @@ const server = http.createServer((req, res) => {
 server.listen(3000, 'localhost', () => {
     console.log('Listening for request on port 3000')
 });
+
+
+
+//// --- This is the end of the line ------ ///////
