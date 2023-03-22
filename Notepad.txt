@@ -1,0 +1,223 @@
+
+Express modules is a framework that help to easily manage our routing request, server side logic and responses in a more eligent way.
+
+
+
+
+
+/////////-----------How to create a server and listen for request--------------////////////////////
+
+// /////-------We have to require the http modules-----------//////////
+// const http = require('http');
+
+
+// /////------creating a server-----------//////////
+
+// const server = http.createServer((req, res) => {
+//     console.log('request made')
+// });
+
+
+// /////------port and localhost-----------//////////
+
+// server.listen(3000, 'localhost', () =>{
+//     console.log('Listening for request on port 3000')
+// });
+
+
+
+
+
+/////------Another examples-----------//////////
+
+const http = require('http');
+const fs = require('fs');
+const _ = require('lodash');
+
+const server = http.createServer((req, res) => {
+   
+    ////Lodash
+    const num  = _.random(0, 20);
+    console.log(num);
+
+    const greet = _.once(() => {
+        console.log('Hello');
+    });
+
+    greet();
+    greet();
+
+    ///--- Set header content type -----//////
+    res.setHeader('content-type',  'text/html');
+
+                ////----routing system-----/////
+    let path = './views/';
+    switch(req.url){
+     case'/':
+        path += 'index.html';
+        res.statusCode = 200;
+        break; 
+     case '/about':
+        path += 'about.html';
+        res.statusCode = 200;
+        break;
+     case '/about me':
+        res.statusCode = 301;
+        res.setHeader('Location', './about');
+        res.end();
+            break;
+     default:
+        path += '404.html';
+        res.statusCode = 404;
+        break;
+    }
+ 
+                ///----- this become to messy if the html file is large, sowe open an index.html file & link it up -----//////
+            // res.write('<head><link rel="stylesheet" href="#"></head>');
+            // res.write('<p>Hello Kenny</p>');
+            // res.write('<p>Hello Kenny how is the learning going</p>');
+
+            ///Sending an HTML files
+    fs.readFile(path, (err, data) => {                      //This send an html file or folder from another source to the browser.
+        if (err) {
+            console.log(err);
+            res.end();                                                      //if this is not included the even if their is an error the server will not read or respond to us the error.
+        } else {
+            // res.write(data);     //since we are sending just one data we can just input it below
+            res.end(data);
+        };
+
+    });
+
+});
+
+
+ 
+server.listen(3000, 'localhost', () => {
+    console.log();
+    console.log('Listening for request on port 3000')
+});
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Ninja | <%= title %></title>
+</head>
+<body>
+   
+<%- include('./partials/nav.ejs') %>                    //// %= was not used because it will skip if there are special characters, but %- include will not leave out any special characters
+
+    <div class="blogs Contents">
+        <h2>All Blogs</h2>
+
+        <% if (blogs.length > 0) { %>                           // An if statement to circle through 
+           <%= blogs.forEach(blog => { %>                        // forEach statement to display the element in each array Object in the app.js 
+
+            <<h3 class="title"><%= blog.title %></h3>
+            <p class="snippet"><%= blog.snippet %></p>>
+
+            <% }) %>
+       <% } else { %>
+            <p> There are no blocks to display</p>
+        <% } %> 
+   
+
+
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+//////////-----------current and actively used fundamental in NODE development today -----------/////////////
+
+const express = require('express');
+let ejs = require('ejs')
+
+///express app
+const app = express();
+
+/////-----Listen to request ----////////
+// app.listen(3000);
+app.use(express.static('views'))
+app.set('view engine', 'ejs')                          //This is a view engine and is set to view.
+
+app.get('/', (req, res) => { 
+    const blogs = [
+        {title: 'Kenny got a job', snippet: 'This is a dream job'},
+        {title: 'Kenny finds Wife', snippet: 'This is a dream wife'},
+        {title: 'Kenny found Jesus', snippet: 'This is a joy eternal'},
+    ];
+    // res.send('<p>Home Page</p>');                   /// The beauty of this is that it automatically set some features for us, So we dont need to start write out the code e.g. ('content-type:' 'type/html')
+    res.render('index.ejs', {title: 'Home', blogs });                                //res.render is the format use to send and dynamic file to the browser using express & ejs view engine
+});
+
+app.get('/about', (req, res) => { 
+    // res.send('<p>About Page</p>');   
+    res.render('about.ejs', {items: ["john", "peter", "happy", "Timothy"]})
+});
+
+
+app.get('/about1', (req, res) => { 
+    // res.send('<p>About Page</p>');   
+    res.render('about1.ejs', {title: 'About' })
+});
+
+
+app.get('/404', (req, res) => { 
+    // res.send('<p>About Page</p>');   
+    res.render('404.ejs', {title: '404' });
+});
+
+
+app.get ('/blogs/create', (req, res) => {
+    res.render('create', {title: 'Create a new Blog' });
+})
+
+
+
+let PORT = process.env.PORT || 8000
+app.listen(PORT, (err)=>{
+    console.log("App running on port", PORT)
+});
+ 
+
+
+
+
+// <% const name = 'mario' %>              //This is going to run as javascript not on the frontend but on the server
+// <p><%= name %></p>                      //This will dynamically inject the content into the HTML file on the browser.
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+        <%- include ('./partials/head.ejs') %>
+
+<body>
+    
+
+    <%= ('./partials/nav.ejs') %>                    // <%= was not used because it will skip if there are special characters, but <%- include will not leave out any special characters
+
+
+    <div class="not-found Contents">
+        <h2>OOPS, page not found</h2>
+
+    </div>
+
+    
+    <%- include ('./partials/footer.ejs') %>
+
+</body>
+</html>

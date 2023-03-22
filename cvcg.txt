@@ -1,0 +1,21 @@
+Password
+
+
+
+oaedn3dYwkdB1APo
+
+mongoexport --uri mongodb+srv://AdeDvictorious:<PASSWORD>@kenny-blog.waiqknc.mongodb.net/<DATABASE> --collection <COLLECTION> --type <FILETYPE> --out <FILENAME>
+
+
+mongodb+srv://AdeDvictorious:<password>@kenny-blog.waiqknc.mongodb.net/test
+
+
+dog.ceo/api/breeds/image/random
+
+
+
+
+AdeDvictorious
+
+
+qkv6DAJGay2K15Xj
